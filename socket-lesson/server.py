@@ -54,8 +54,8 @@ def send_commands(conn):
 			sys.exit()
 		if len(str.encode(cmd)) > 0:
 			conn.send(str.encode(cmd))
-			client_response = str(conn.recv(1024), "utf-8")
-			print(client_response, end = "")
+			client_response = str(conn.recv(1024), 'utf-8')
+			print(client_response, end = '')
 
 def main():
 	socket_create()
