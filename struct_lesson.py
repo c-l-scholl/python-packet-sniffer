@@ -16,4 +16,5 @@ unpacked_data = unpack('iif', packed_data)
 print(unpacked_data)
 
 print(unpack('iif', b'\x06\x00\x00\x00\x13\x00\x00\x00)\\\x87@'))
+# unpack() returns a tuple
 # need leading b (not in quotes)
