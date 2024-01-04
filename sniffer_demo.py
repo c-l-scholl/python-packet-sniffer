@@ -1,18 +1,15 @@
 import socket
 import struct
 from textwrap import *
-from pyuac import main_requires_admin
 
 
-# @main_requires_admin
 def main():
-	#conn = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.ntohs(3))
+
+	# modified to run on windows
 	HOST = socket.gethostbyname('192.168.84.20')
-	#pcap = Pcap('capture.pcap')
 
 	conn = socket.socket(socket.AF_INET,socket.SOCK_RAW,socket.IPPROTO_IP) 
 	# create a raw socket and bind it to the public interface
-	
 	conn.bind((HOST, 0))
 
 	# Include IP headers
