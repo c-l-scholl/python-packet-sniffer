@@ -1,8 +1,27 @@
-from socket import *
+import socket
 import struct
 from textwrap import *
+from pyuac import main_requires_admin
 
-# watch tutorial on sockets
+@main_requires_admin
+def main():
+	#conn = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.ntohs(3))
+	conn = socket.socket(socket.AF_INET,socket.SOCK_RAW,socket.IPPROTO_IP) 
+	# create a raw socket and bind it to the public interface
+	HOST = socket.gethostbyname(socket.gethostname())
+	conn.bind((HOST, 0))
+
+	# Include IP headers
+	conn.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
+
+	#receives all packets
+	conn.ioctl(socket.SIO_RCVALL, socket.RCVALL_ON)
+
+	while True:
+		raw_data, addr = conn.recvfrom(65536)
+		dest_mac, src_mac, eth_proto, data = ethernet_frame(raw_data)
+		print('\nEthernet Frame')
+		print('Destination: {}, Source: {}, Protocol: {}'.format(dest_mac, src_mac, eth_proto))
 
 # unpack ethernet frame
 
@@ -16,3 +35,5 @@ def get_mac_addr(bytes_addr):
 	bytes_string = map('{:02x}'.format, bytes_addr)
 	return ':'.join(bytes_addr).upper()
 
+if __name__ == "__main__":
+	main() # Already an admin here.
