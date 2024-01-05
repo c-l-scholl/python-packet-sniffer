@@ -49,8 +49,45 @@ def main():
 			print(TAB_2 + 'Protocol: {}, Source: {}, Target: {}'.format(ipv4_proto, ipv4_src, ipv4_target))
 
 			# get type of packet by protocol
+
+			# ICMP
 			if ipv4_proto == 1:
-				icmp_type, code, checksum, icmp_data = icmp_packet(ipv4_data)
+				icmp_type, icmp_code, icmp_checksum, icmp_data = icmp_packet(ipv4_data)
+
+				# print ICMP packet info
+				print(TAB_1 + 'ICMP Packet:')
+				print(TAB_2 + 'Type: {}, Code: {}, Checksum: {}'.format(icmp_type, icmp_code, icmp_checksum))
+				print(TAB_2 + 'Data:')
+				print(multiline_format(TAB_3, icmp_data))
+
+			# TCP
+			elif ipv4_proto == 6:
+				(tcp_src_port, tcp_dest_port, tcp_sequence, tcp_acknowledgement, flag_urg, flag_ack, flag_psh, flag_rst, flag_syn, flag_fin, tcp_data) = tcp_packet(ipv4_data)
+
+				# print TCP Segment info
+				print(TAB_1 + 'TCP Segment:')
+				print(TAB_2 + 'Source: {}, Destination: {}'.format(tcp_src_port, tcp_dest_port))
+				print(TAB_2 + 'Sequence: {}, Acknowledgement: {}'.format(tcp_sequence, tcp_acknowledgement))
+				print(TAB_2 + 'Flags:')
+				print(TAB_3 + 'URG: {}, ACK: {}, PSH: {}, RST: {}, SYN: {}, FIN: {}'.format(flag_urg, flag_ack, flag_psh, flag_rst, flag_syn, flag_fin))
+				print(TAB_2 + 'Data:')
+				print(multiline_format(TAB_3, tcp_data))
+
+
+			# UDP
+			elif ipv4_proto == 17:
+				udp_src_port, udp_dest_port, udp_length, udp_data = udp_packet(ipv4_data)
+
+				# Print UDP Segment
+				print(TAB_1 + 'UDP Segment:')
+				print(TAB_2 + 'Source: {}, Destination: {}, Length: {}'.format(udp_src_port, udp_dest_port, udp_length))
+				print(TAB_2 + 'Data:')
+				print(multiline_format(TAB_3, udp_data))
+
+			# Other protocols
+			else:
+				print(TAB_1 + 'Data:')
+				print(multiline_format(TAB_2, ipv4_data))
 
 # unpack ethernet frame
 
@@ -86,7 +123,7 @@ def icmp_packet(icmp_data):
 
 # Unpack TCP Packet
 def tcp_packet(tcp_data):	
-	src_port, desc_port, sequence, acknowledgement, offset_reserved_flags = struct.unpack('! H H L L H', tcp_data[14:])
+	src_port, dest_port, sequence, acknowledgement, offset_reserved_flags = struct.unpack('! H H L L H', tcp_data[14:])
 	offset = (offset_reserved_flags >> 12) * 4
 	flag_urg = (offset_reserved_flags >> 32) * 5
 	flag_ack = (offset_reserved_flags >> 16) * 4
@@ -94,12 +131,12 @@ def tcp_packet(tcp_data):
 	flag_rst = (offset_reserved_flags >> 4) * 2
 	flag_syn = (offset_reserved_flags >> 2) * 1
 	flag_fin = (offset_reserved_flags >> 1)
-	return src_port, desc_port, sequence, acknowledgement, flag_urg, flag_ack, flag_psh, flag_rst, flag_syn, flag_fin, tcp_data[offset:]
+	return src_port, dest_port, sequence, acknowledgement, flag_urg, flag_ack, flag_psh, flag_rst, flag_syn, flag_fin, tcp_data[offset:]
 
 # Unpack udp packet (optional)
 def udp_packet(udp_data):
-	src_port, desc_port, size = struct.unpack('! H H 2x H', udp_data[:8])
-	return src_port, desc_port, size, udp_data[8:]
+	src_port, dest_port, size = struct.unpack('! H H 2x H', udp_data[:8])
+	return src_port, dest_port, size, udp_data[8:]
 
 # Formats multi-line data 
 # Not related to packet sniffing, just readability
