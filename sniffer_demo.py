@@ -39,6 +39,19 @@ def main():
 		print('\nEthernet Frame')
 		print(TAB_1 + 'Destination: {}, Source: {}, Protocol: {}'.format(dest_mac, src_mac, eth_proto))
 
+		# Use protocol 8 for IPv4 (regular internet traffic)
+		if eth_proto == 8:
+			(ipv4_vers, ipv4_header_len, ipv4_ttl, ipv4_proto, ipv4_src, ipv4_target, ipv4_data) = ipv4_packet(data)
+
+			# print ivp4 packet info
+			print(TAB_1 + 'IPv4 Packet:')
+			print(TAB_2 + 'Version: {}, Header Length: {}, TTL: {}'.format(ipv4_vers, ipv4_header_len, ipv4_ttl))
+			print(TAB_2 + 'Protocol: {}, Source: {}, Target: {}'.format(ipv4_proto, ipv4_src, ipv4_target))
+
+			# get type of packet by protocol
+			if ipv4_proto == 1:
+				icmp_type, code, checksum, icmp_data = icmp_packet(ipv4_data)
+
 # unpack ethernet frame
 
 def ethernet_frame(data):
