@@ -22,15 +22,15 @@ def main():
 
 	# modified to run on windows properly
 	HOST = socket.gethostbyname('192.168.84.20')
-	conn = socket.socket(socket.AF_INET,socket.SOCK_RAW,socket.IPPROTO_IP) 
+	conn = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_IP) 
  
-	# create a raw socket and bind it to the public interface
+	# Create a raw socket and bind it to the public interface
 	conn.bind((HOST, 0))
 
 	# Include IP headers
 	conn.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 
-	#receives all packets
+	# receive all packets
 	conn.ioctl(socket.SIO_RCVALL, socket.RCVALL_ON)
 
 	while True:
@@ -58,7 +58,7 @@ def main():
 				print(TAB_1 + 'ICMP Packet:')
 				print(TAB_2 + 'Type: {}, Code: {}, Checksum: {}'.format(icmp_type, icmp_code, icmp_checksum))
 				print(TAB_2 + 'Data:')
-				print(multiline_format(TAB_3, icmp_data))
+				print(multiline_format(DATA_TAB_3, icmp_data))
 
 			# TCP
 			elif ipv4_proto == 6:
@@ -71,7 +71,7 @@ def main():
 				print(TAB_2 + 'Flags:')
 				print(TAB_3 + 'URG: {}, ACK: {}, PSH: {}, RST: {}, SYN: {}, FIN: {}'.format(flag_urg, flag_ack, flag_psh, flag_rst, flag_syn, flag_fin))
 				print(TAB_2 + 'Data:')
-				print(multiline_format(TAB_3, tcp_data))
+				print(multiline_format(DATA_TAB_3, tcp_data))
 
 
 			# UDP
@@ -82,12 +82,12 @@ def main():
 				print(TAB_1 + 'UDP Segment:')
 				print(TAB_2 + 'Source: {}, Destination: {}, Length: {}'.format(udp_src_port, udp_dest_port, udp_length))
 				print(TAB_2 + 'Data:')
-				print(multiline_format(TAB_3, udp_data))
+				print(multiline_format(DATA_TAB_3, udp_data))
 
 			# Other protocols
 			else:
 				print(TAB_1 + 'Data:')
-				print(multiline_format(TAB_2, ipv4_data))
+				print(multiline_format(DATA_TAB_2, ipv4_data))
 
 # unpack ethernet frame
 
