@@ -21,7 +21,7 @@ DATA_TAB_4 = '\t\t\t\t'
 def main():
 
 	# modified to run on windows properly
-	HOST = socket.gethostbyname('192.168.84.20')
+	HOST = socket.gethostbyname(socket.gethostname())
 	conn = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_IP) 
  
 	# Create a raw socket and bind it to the public interface
