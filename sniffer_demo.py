@@ -88,6 +88,9 @@ def main():
 			else:
 				print(TAB_1 + 'Data:')
 				print(multiline_format(DATA_TAB_2, ipv4_data))
+		else:
+			print(TAB_1 + 'Data:')
+			print(multiline_format(DATA_TAB_2, data))
 
 # unpack ethernet frame
 
