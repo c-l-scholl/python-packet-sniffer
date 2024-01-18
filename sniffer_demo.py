@@ -88,6 +88,8 @@ def main():
 			else:
 				print(TAB_1 + 'Data:')
 				print(multiline_format(DATA_TAB_2, ipv4_data))
+
+		# print raw ethernet data
 		else:
 			print(TAB_1 + 'Data:')
 			print(multiline_format(DATA_TAB_2, data))
